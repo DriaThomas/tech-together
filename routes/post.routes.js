@@ -26,8 +26,8 @@ router.get("/post-create", (req, res) => {
 
 // ... your code here
 router.post("/post-create", (req, res) => {
-  const { author, title, content } = req.body;
-  Post.create({ author, title, content }).then((postFromDB) => {
+  const { username, title, content } = req.body;
+  Post.create({ username, title, content }).then((postFromDB) => {
     res.redirect("/post-all");
   });
 });
@@ -39,7 +39,7 @@ router.post("/post-create", (req, res) => {
 // ... your code here
 router.get("/post-all", (req, res) => {
   Post.find()
-    .populate("author")
+    .populate("username")
     .then(async (postsFromDB) => {
       // const copyOfPosts = [];
       // for (let i = 0; i < postsFromDB.length; i++) {
@@ -65,7 +65,7 @@ router.get("/post-all", (req, res) => {
 router.get("/post/:id", (req, res) => {
   const { id } = req.params;
   Post.findById(id)
-    .populate("author comments")
+    .populate("username comments")
     .then((post) => {
       User.find().then((dbUsers) => {
         console.log(post);
@@ -73,5 +73,20 @@ router.get("/post/:id", (req, res) => {
       });
     });
 });
+
+
+router.get("/post/:id/:title", (req, res) => {
+    const { title } = req.params.id;
+    Post.findById(title)
+      .populate("username comments")
+      .then((post) => {
+        User.find().then((dbUsers) => {
+
+          console.log(post);
+          res.render("tree", { post, dbUsers });
+        });
+      });
+  });
+  
 
 module.exports = router;

@@ -1,8 +1,28 @@
-<h1>Family Gifts</h1>
-<span>Welcome
-    {{if islogedin}}
-    {{#each userObject}}
-    {{this.firstName}}
-    {{/each}} !</span>
+{{!--
+<link rel="stylesheet" href="/public/stylesheets/style.css"> --}}
 
-{{!-- <a class="nav-link" href="/profile">Profile</a> --}}
+<div class="main-page">
+    <div class="center">
+        <div class="bl-content">
+            <div class="main-text">
+                {{!-- <h1 class="center-title" id="heading-font">Family Gifts</h1> --}}
+                <h1 class="center-title" id="heading-small">Family Gifts</h1>
+                <p class="center-title">Share gifts and keep up to update with family</p>
+                <span class="center-title">Welcome
+
+                    {{#each userObject}}
+                    {{this.firstName}}
+                    {{/each}} !</span>
+            </div>
+        </div>
+        <div class="main-image">
+            <button class="home-button"><a class="anchorHome" href="auth/signup">Signup</a></button>
+            <img class="oak-pic" src="/./images/oak.png" alt="oak tree"></img>
+            <button class="home-button"><a class="anchorHome" href="auth/login">Login</a></button>
+        </div>
+        <div class="main-image">
+            <img class="root" src="/./images/root.png" alt="root"></img>
+        </div>
+    </div>
+    {{!-- <a class="nav-link" href="/profile">Profile</a> --}}
+</div>

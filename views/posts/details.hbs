@@ -1,8 +1,8 @@
 <h2>{{post.title}} Family</h2>
 <div>
-    <h5><a href="/post/{{post._id}}/{{post.title}}">{{post.title}}</a> - {{post.author.username}}</h5>
+    <h5><a href="/post/{{post._id}}/{{post.title}}">{{post.title}}</a> - {{post.username}}</h5>
     <p>{{post.content}}</p>
-    <p>{{post.author.username}}</p>
+    <p>{{post.username}}</p>
     <ul>
         {{#each post.comments}}
         <li>Gift: {{this.content}}</li>
@@ -21,7 +21,7 @@
     <br>
 
     <label for="author-select"> Created by:
-        <select name="author">
+        <select name="username">
             <option disable selected value=""></option>
             {{#each dbUsers}}
             <option value="{{this._id}}"> {{this.username}} </option>

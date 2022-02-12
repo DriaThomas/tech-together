@@ -1,59 +1,3 @@
-{{!-- <form action='/review/add-review' class='auth-form' method='POST'>
-    <div class='auth-form-container'>
-        <input type='hidden' name="id" value="{{id}}" />
-        <h1>
-            Share Your Gift With Your Family
-        </h1>
-        <h1>
-            {{userName}}
-        </h1>
-        <p>
-
-        </p>
-
-
-        <input type='hidden' name='name' value="{{name}}" />
-        <hr />
-
-        <label>
-            <b>
-                Gift
-            </b>
-            <p>Please fill in this form</p>
-            <hr>
-
-            <label for="email"><b>Gift</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required>
-
-            {{!-- <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required> --}}
-
-            <label for="userName"><b>Family Sirname</b></label>
-            <input type="text" placeholder="Enter username" name="userName" required>
-
-
-
-
-            <br />
-            <label for="reviewContent">
-                <textarea autofocus name='reviewContent' rows='4' cols='50'></textarea>
-            </label>
-            <button type='submit'>
-                Submit
-            </button>
-
-            {{#if errorMessage}}
-            <p class='error'>
-                {{errorMessage}}
-            </p>
-            {{/if}}
-    </div>
-</form> --}}
-{{!-- <a href="/add-review">Share Gift with family</a> --}}
-
-
-
-
 <h2>Create Family Tree</h2>
 
 <form action="/post-create" method="POST">
@@ -62,9 +6,9 @@
     </label>
     <br>
     <label>Realtionship to Family:
-        <input type="text" name="author" />
+        <input type="text" name="username" />
     </label>
-    <label> description:
+    <label> Family History:
         <textarea type="text" name="content"> </textarea>
     </label>
     {{!-- <label> created by:
@@ -72,8 +16,8 @@
     </label> --}}
     <br>
 
-    <label for="author-select"> Created by:
-        <select name="author">
+    <label for="username-select"> Created by:
+        <select name="username">
             {{!-- <option disable selected value=""></option> --}}
             {{#each dbUsers}}
             <option value="{{this._id}}"> {{this.username}} </option>
@@ -84,3 +28,5 @@
 
     <button type="submit"> Create the post </button>
 </form>
+
+<a class="nav-link" href="/dashboard">Return to Dashboard</a>

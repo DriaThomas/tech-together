@@ -9,8 +9,8 @@ const Comment = require("../models/Comment.model");
 // ****************************************************************************************
 
 router.post("/comment-create/:id", (req, res) => {
-  const { author, content } = req.body;
-  Comment.create({ author, content }).then((commentFromDB) => {
+  const { username, content } = req.body;
+  Comment.create({ username, content }).then((commentFromDB) => {
     console.log({ reqid: req.params.id });
     Post.findByIdAndUpdate(req.params.id, {
       $push: { comments: commentFromDB._id },
