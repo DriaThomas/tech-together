@@ -1,0 +1,47 @@
+<form action='/profile' class='edit-form' method='POST' enctype='multipart/form-data'>
+    <div class='edit-form-container'>
+        <h1>
+            Edit Your Profile
+        </h1>
+
+        <hr />
+
+        <label>
+            <b>
+                First Name
+            </b>
+            <br />
+            <input type='text' name='firstName' value="{{user.firstName}}" />
+        </label>
+
+        <label>
+            <b>
+                Last Name
+            </b>
+            <br />
+            <input type='text' name='lastName' value="{{user.lastName}}" />
+        </label>
+
+        <label>
+            <b>
+                Gift
+            </b>
+            <br />
+            <input type='text' name='gift' value="{{user.gift}}" />
+        </label>
+
+        <label>
+            <b>
+                Family
+            </b>
+            <br />
+            <input type='text' name='sirname' value="{{user.sirname}}" />
+        </label>
+
+
+
+        <button type='submit'>
+            Submit
+        </button>
+    </div>
+</form>

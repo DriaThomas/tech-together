@@ -1,0 +1,51 @@
+<div class='form-container-login'>
+    <form action='/auth/login' class='auth-form' method='POST'>
+        <div class='auth-form-container'>
+            <h1>
+                Welcome Back to <br> FAMILY TREE
+            </h1>
+            <p>
+
+            </p>
+            <hr />
+            <label>
+                <b>
+                    Email
+                </b>
+                <br />
+                <input type='text' placeholder='Enter Email' name='email' required />
+            </label>
+            <label>
+                <b>
+                    Password
+                </b>
+                <br />
+                <input type='password' placeholder='Enter Password' name='password' required />
+            </label>
+            <label>
+                <input type='checkbox' checked='checked' name='remember' style='margin-bottom:15px' />
+                Remember me
+            </label>
+
+            <button type='submit'>
+                Log In
+            </button>
+            {{#if errorMessage}}
+            <p class='error'>
+                {{errorMessage}}
+            </p>
+            {{/if}}
+
+    </form>
+    <h6 class='auth-form-text'><i>Create an account</i></h6>
+    <form action='/auth/signup' class='auth-form' method='GET'>
+
+        <div class='auth-form'>
+
+            <button type='submit' id="sign-up-button">
+                Sign Up
+            </button>
+        </div>
+    </form>
+</div>
+</div>

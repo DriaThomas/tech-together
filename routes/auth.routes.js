@@ -1,0 +1,557 @@
+// const router = require("express").Router();
+
+// // ℹ️ Handles password encryption
+// const bcrypt = require("bcrypt");
+// const mongoose = require("mongoose");
+
+// // How many rounds should bcrypt run the salt (default [10 - 12 rounds])
+// const saltRounds = 10;
+
+// // Require the User model in order to interact with the database
+// const User = require("../models/User.model");
+// const Session = require("../models/Session.model");
+
+// // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
+// const isLoggedOut = require("../middleware/isLoggedOut");
+// const isLoggedIn = require("../middleware/isLoggedIn");
+
+// router.get("/session", (req, res) => {
+//   // we dont want to throw an error, and just maintain the user as null
+//   if (!req.headers.authorization) {
+//     return res.json(null);
+//   }
+
+//   // accessToken is being sent on every request in the headers
+//   const accessToken = req.headers.authorization;
+
+//   Session.findById(accessToken)
+//     .populate("user")
+//     .then((session) => {
+//       if (!session) {
+//         return res.status(404).json({ errorMessage: "Session does not exist" });
+//       }
+//       return res.status(200).json(session);
+//     });
+// });
+
+// router.post("/signup", isLoggedOut, (req, res) => {
+//   const { username, password } = req.body;
+
+//   if (!username) {
+//     return res
+//       .status(400)
+//       .json({ errorMessage: "Please provide your username." });
+//   }
+
+//   if (password.length < 8) {
+//     return res.status(400).json({
+//       errorMessage: "Your password needs to be at least 8 characters long.",
+//     });
+//   }
+
+//   //   ! This use case is using a regular expression to control for special characters and min length
+//   /*
+//   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+
+//   if (!regex.test(password)) {
+//     return res.status(400).json( {
+//       errorMessage:
+//         "Password needs to have at least 8 chars and must contain at least one number, one lowercase and one uppercase letter.",
+//     });
+//   }
+//   */
+
+//   // Search the database for a user with the username submitted in the form
+//   User.findOne({ username }).then((found) => {
+//     // If the user is found, send the message username is taken
+//     if (found) {
+//       return res.status(400).json({ errorMessage: "Username already taken." });
+//     }
+
+//     // if user is not found, create a new user - start with hashing the password
+//     return bcrypt
+//       .genSalt(saltRounds)
+//       .then((salt) => bcrypt.hash(password, salt))
+//       .then((hashedPassword) => {
+//         // Create a user and save it in the database
+//         return User.create({
+//           username,
+//           password: hashedPassword,
+//         });
+//       })
+//       .then((user) => {
+//         Session.create({
+//           user: user._id,
+//           createdAt: Date.now(),
+//         }).then((session) => {
+//           res.status(201).json({ user, accessToken: session._id });
+//         });
+//       })
+//       .catch((error) => {
+//         if (error instanceof mongoose.Error.ValidationError) {
+//           return res.status(400).json({ errorMessage: error.message });
+//         }
+//         if (error.code === 11000) {
+//           return res.status(400).json({
+//             errorMessage:
+//               "Username need to be unique. The username you chose is already in use.",
+//           });
+//         }
+//         return res.status(500).json({ errorMessage: error.message });
+//       });
+//   });
+// });
+
+// router.post("/login", isLoggedOut, (req, res, next) => {
+//   const { username, password } = req.body;
+
+//   if (!username) {
+//     return res
+//       .status(400)
+//       .json({ errorMessage: "Please provide your username." });
+//   }
+
+//   // Here we use the same logic as above
+//   // - either length based parameters or we check the strength of a password
+//   if (password.length < 8) {
+//     return res.status(400).json({
+//       errorMessage: "Your password needs to be at least 8 characters long.",
+//     });
+//   }
+
+//   // Search the database for a user with the username submitted in the form
+//   User.findOne({ username })
+//     .then((user) => {
+//       // If the user isn't found, send the message that user provided wrong credentials
+//       if (!user) {
+//         return res.status(400).json({ errorMessage: "Wrong credentials." });
+//       }
+
+//       // If user is found based on the username, check if the in putted password matches the one saved in the database
+//       bcrypt.compare(password, user.password).then((isSamePassword) => {
+//         if (!isSamePassword) {
+//           return res.status(400).json({ errorMessage: "Wrong credentials." });
+//         }
+//         Session.create({ user: user._id, createdAt: Date.now() }).then(
+//           (session) => {
+//             return res.json({ user, accessToken: session._id });
+//           }
+//         );
+//       });
+//     })
+
+//     .catch((err) => {
+//       // in this case we are sending the error handling to the error handling middleware that is defined in the error handling file
+//       // you can just as easily run the res.status that is commented out below
+//       next(err);
+//       // return res.status(500).render("login", { errorMessage: err.message });
+//     });
+// });
+
+// router.delete("/logout", isLoggedIn, (req, res) => {
+//   Session.findByIdAndDelete(req.headers.authorization)
+//     .then(() => {
+//       res.status(200).json({ message: "User was logged out" });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({ errorMessage: err.message });
+//     });
+// });
+
+// module.exports = router;
+
+
+// const { Router } = require("express");
+// const router = new Router();
+// const nodemailer = require("nodemailer");
+// // const templates = require('../templates/template');
+
+// // ℹ️ Handles password encryption
+// const bcrypt = require("bcryptjs");
+// const mongoose = require("mongoose");
+
+// // How many rounds should bcrypt run the salt (default [10 - 12 rounds])
+// const saltRounds = 10;
+
+// // Require the User model in order to interact with the database
+// const User = require("../models/User.model");
+
+// // const fileUploader = require("../config/cloudinary.config");
+
+// // Require necessary (isLoggedOut and isLoggedIn) middleware in order to control access to specific routes
+// const isLoggedOut = require("../middleware/isLoggedOut");
+// const isLoggedIn = require("../middleware/isLoggedIn");
+
+// // ****************************************************************************************
+// // GET route to render signup form
+// // ****************************************************************************************
+// router.get("/signup", isLoggedOut, (req, res) => {
+//   res.render("auth/signup", { isLoggedIn: req.session.user });
+// });
+
+// router.post("/signup", (req, res) => {
+//   const { email, password, firstName, lastName, userName } = req.body;
+//   console.log("User: ", { email, password, firstName, lastName, userName });
+
+//   if (!email || !password || !firstName || !lastName || !userName) {
+//     return res.status(400).render("auth/signup", {
+//       errorMessage: "Please fill out all required fields.",
+//     });
+//   }
+
+//   // Search the database for a user with the email submitted in the form
+//   User.findOne({ email: email }).then((found) => {
+//     console.log("problem?:", { found });
+//     //   // If the user is found, send the message email is already used
+//     if (found) {
+//       return res.status(400).render("auth/signup", {
+//         errorMessage: "Email is already being used.",
+//       });
+//     }
+
+//     // if user is not found, create a new user - start with hashing the password
+//     return bcrypt
+//       .genSalt(saltRounds)
+//       .then((salt) => bcrypt.hash(password, salt))
+//       .then((hashedPassword) => {
+//         return User.create({
+//           email: email,
+//           password: hashedPassword,
+//           firstName: firstName,
+//           lastName: lastName,
+//           userName: userName,
+//           // profilePic: req.files.path,
+//         });
+//       })
+//       .then((user) => {
+//         // Bind the user to the session object
+//         req.session.user = user;
+//         console.log("Session", req.session.user);
+
+//         // let { email } = req.body;
+//         // let transporter = nodemailer.createTransport({
+//         //   service: "Gmail",
+//         //   auth: {
+//         //     user: process.env.NODEMAILER_ACC,
+//         //     pass: process.env.NODEMAILER_PASS,
+//         //   },
+//         // });
+
+//         // transporter
+//         //   .sendMail({
+//         //     from: `Bulk Beauty <${process.env.NODEMAILER_ACC}>`,
+//         //     to: email,
+//         //     subject: "Congrats, you are registered on BulkBeauty.com",
+//         //     text: "BulkBeauty",
+//             // html: templates.templateExample(`${firstName} ${lastName}`),
+//           //   auth: {
+//           //     type: 'OAuth2',
+//           //     user: 'user@example.com',
+//           //     clientId: '000000000000-xxx0.apps.googleusercontent.com',
+//           //     clientSecret: 'XxxxxXXxX0xxxxxxxx0XXxX0',
+//           //     refreshToken: '1/XXxXxsss-xxxXXXXXxXxx0XXXxxXXx0x00xxx',
+//           //     accessToken: 'ya29.Xx_XX0xxxxx-xX0X0XxXXxXxXXXxX0x'
+//           // }
+//           // })
+//           // .then((info) => {
+//           //   console.log("Info from nodeamailer", info);
+//           //   res.redirect("/");
+//           // })
+//           // .catch((error) =>
+//           //   console.log(
+//           //     `Something went wrong during sending the email to the user: ${error}`
+//           //   )
+//           // );
+//       })
+//       .catch((error) => {
+//         if (error instanceof mongoose.Error.ValidationError) {
+//           return res
+//             .status(400)
+//             .render("auth/signup", { errorMessage: error.message });
+//         }
+//         if (error.code === 11000) {
+//           return res.status(400).render("auth/signup", {
+//             errorMessage: error,
+//           });
+//         }
+//         return res
+//           .status(500)
+//           .render("auth/signup", { errorMessage: error.message });
+//       });
+//   });
+// });
+
+// // ****************************************************************************************
+// // GET route to render login form
+// // ****************************************************************************************
+// router.get("/login", isLoggedOut, (req, res) => {
+//   res.render("auth/login", { isLoggedIn: req.session.user });
+// });
+
+// // ****************************************************************************************
+// // POST route to submit user's username and password
+// // ****************************************************************************************
+// router.post("/login", isLoggedOut, (req, res, next) => {
+//   const { email, password } = req.body;
+
+//   if (!email) {
+//     return res
+//       .status(400)
+//       .render("auth/login", { errorMessage: "Please provide your email." });
+//   }
+
+//   //   // Here we use the same logic as above
+//   //   // - either length based parameters or we check the strength of a password
+//   //   if (password.length < 8) {
+//   //     return res.status(400).render("auth/login", {
+//   //       errorMessage: "Your password needs to be at least 8 characters long.",
+//   //     });
+//   //   }
+
+//   //   // Search the database for a user with the username submitted in the form
+//   User.findOne({ email })
+//     .then((user) => {
+//       // If the user isn't found, send the message that user provided wrong credentials
+//       if (!user) {
+//         return res.status(400).render("auth/login", {
+//           errorMessage: "Please enter a valid username and / or password.",
+//         });
+//       }
+
+//       // If user is found based on the username, check if the in putted password matches the one saved in the database
+//       bcrypt.compare(password, user.password).then((isSamePassword) => {
+//         if (!isSamePassword) {
+//           return res.status(400).render("auth/login", {
+//             errorMessage: "Please enter a valid username and / or password.",
+//           });
+//         }
+//         req.session.user = user;
+//         global.test = user;
+//         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
+//         return res.redirect("/");
+//       });
+//     })
+
+//     .catch((err) => {
+//       // in this case we are sending the error handling to the error handling middleware that is defined in the error handling file
+//       // you can just as easily run the res.status that is commented out below
+//       next(err);
+//       // return res.status(500).render("login", { errorMessage: err.message });
+//     });
+// });
+
+// // ****************************************************************************************
+// // GET route to kill the user's session - logout
+// // ****************************************************************************************
+// router.get("/logout", isLoggedIn, (req, res) => {
+//   req.session.destroy((err) => {
+//     if (err) {
+//       return res.status(500).render("auth/logout", {
+//         errorMessage: err.message,
+//         isLoggedIn: req.session.user,
+//       });
+//     }
+//     res.redirect("/");
+//   });
+// });
+
+// module.exports = router;
+
+
+
+const { Router } = require('express');
+const router = new Router();
+const nodemailer = require('nodemailer');
+// const templates = require('../templates/template');
+
+// ℹ️ Handles password encryption
+const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+
+// How many rounds should bcrypt run the salt (default [10 - 12 rounds])
+const saltRounds = 10;
+
+// Require the User model in order to interact with the database
+const User = require('../models/User.model');
+
+// const fileUploader = require('../config/cloudinary.config');
+
+// Require necessary (isLoggedOut and isLoggedIn) middleware in order to control access to specific routes
+const isLoggedOut = require('../middleware/isLoggedOut');
+const isLoggedIn = require('../middleware/isLoggedIn');
+
+// ****************************************************************************************
+// GET route to render signup form
+// ****************************************************************************************
+router.get('/signup', isLoggedOut, (req, res) => {
+  res.render('auth/signup', { isLoggedIn: req.session.user });
+});
+
+router.post('/signup', 
+// fileUploader.single('profilePic'), 
+(req, res, next) => {
+  const { email, password, passwordRetype, firstName, lastName,gift } = req.body;
+  console.log('User: ', { email, password, passwordRetype, firstName, lastName,gift });
+
+  // if (password !== passwordRetype) {
+  //   return res.status(400).render('auth/signup', {
+  //     errorMessage: 'Password did not match',
+  //   });
+  // }
+  if (!email || !password || !firstName || !lastName || gift) {
+    return res.status(400).render('auth/signup', {
+      errorMessage: 'Please fill out all required fields.',
+    });
+  }
+
+  // Search the database for a user with the email submitted in the form
+  User.findOne({ email: email }).then((found) => {
+    // If the user is found, send the message email is already used
+    if (found) {
+      return res.status(400).render('auth/signup', {
+        errorMessage: 'Email is already being used.',
+      });
+    }
+
+    // if user is not found, create a new user - start with hashing the password
+    return bcrypt
+      .genSalt(saltRounds)
+      .then((salt) => bcrypt.hash(password, salt))
+      .then((hashedPassword) => {
+        return User.create({
+          email: email,
+          password: hashedPassword,
+          firstName: firstName,
+          lastName: lastName,
+          // profilePic: req.file.path,
+        });
+      })
+      .then((user) => {
+        // Bind the user to the session object
+        req.session.user = user;
+        console.log('Session', req.session.user);
+
+        let { email } = req.body;
+        let transporter = nodemailer.createTransport({
+          service: 'Gmail',
+          auth: {
+            user: process.env.NODEMAILER_ACC,
+            pass: process.env.NODEMAILER_PASS,
+          },
+        });
+
+        transporter
+          .sendMail({
+            from: `Family Tree <${process.env.NODEMAILER_ACC}>`,
+            to: email,
+            subject: 'Congrats, you are registered on FamilyTree.com',
+            text: 'FamilyTree',
+            html: templates.templateExample(`${firstName} ${lastName}`),
+          })
+          .then((info) => {
+            res.redirect('/family');
+          })
+          .catch((error) => {
+            console.log(
+              `Something went wrong during sending the email to the user: ${error}`
+            );
+            res.redirect('/');
+          });
+      })
+      .catch((error) => {
+        if (error instanceof mongoose.Error.ValidationError) {
+          return res
+            .status(400)
+            .render('auth/signup', { errorMessage: error.message });
+        }
+        if (error.code === 11000) {
+          return res.status(400).render('auth/signup', {
+            errorMessage: error,
+          });
+        }
+        // if 'path' found that means that user did not upload the profile pic
+        error.message.includes('path')
+          ? res.render('auth/signup', {
+              errorMessage: 'Please upload profile image',
+            })
+          : res.redirect('/');
+      });
+  });
+});
+
+// ****************************************************************************************
+// GET route to render login form
+// ****************************************************************************************
+router.get('/login', isLoggedOut, (req, res) => {
+  res.render('auth/login', { isLoggedIn: req.session.user });
+});
+
+// ****************************************************************************************
+// POST route to submit user's username and password
+// ****************************************************************************************
+router.post('/login', isLoggedOut, (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email) {
+    return res
+      .status(400)
+      .render('auth/login', { errorMessage: 'Please provide your email.' });
+  }
+
+  //   // Here we use the same logic as above
+  //   // - either length based parameters or we check the strength of a password
+  //   if (password.length < 8) {
+  //     return res.status(400).render("auth/login", {
+  //       errorMessage: "Your password needs to be at least 8 characters long.",
+  //     });
+  //   }
+
+  //   // Search the database for a user with the username submitted in the form
+  User.findOne({ email })
+    .then((user) => {
+      // If the user isn't found, send the message that user provided wrong credentials
+      if (!user) {
+        return res.status(400).render('auth/login', {
+          errorMessage: 'Please enter a valid username and / or password.',
+        });
+      }
+
+      // If user is found based on the username, check if the in putted password matches the one saved in the database
+      bcrypt.compare(password, user.password).then((isSamePassword) => {
+        if (!isSamePassword) {
+          return res.status(400).render('auth/login', {
+            errorMessage: 'Please enter a valid username and / or password.',
+          });
+        }
+        req.session.user = user;
+        global.test = user;
+        // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
+        return res.redirect('/family');
+      });
+    })
+
+    .catch((err) => {
+      // in this case we are sending the error handling to the error handling middleware that is defined in the error handling file
+      // you can just as easily run the res.status that is commented out below
+      next(err);
+      // return res.status(500).render("login", { errorMessage: err.message });
+    });
+});
+
+// ****************************************************************************************
+// GET route to kill the user's session - logout
+// ****************************************************************************************
+router.get('/logout', isLoggedIn, (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).render('auth/logout', {
+        errorMessage: err.message,
+        isLoggedIn: req.session.user,
+      });
+    }
+    res.redirect('/');
+  });
+});
+
+module.exports = router;

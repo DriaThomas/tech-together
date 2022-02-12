@@ -1,0 +1,49 @@
+<h1>Family Gifts</h1>
+<span>Welcome
+    {{!-- {{if islogedin}} --}}
+    {{#each userObject}}
+    {{this.firstName}}
+    {{/each}} !</span>
+<a class="nav-link" href="/profile">Profile</a>
+<a class="nav-link" href="/post-all">Family Unite</a>
+
+<a class="nav-link" href="/family-tree">Add gift to family tree</a>
+<hr>
+Review
+<a href="/post-create">CREATE TREE</a>
+{{#each this}}
+{{this.reviewContent}}
+{{/each}}
+
+
+<h1>Reviews</h1>
+
+<br>
+
+{{!-- <div>
+    <h3>In the DB we have {{numberOfBooks}} books</h3>
+</div>
+
+<hr>
+
+{{#each books}}
+<div>
+    <h3>{{ title }}</h3>
+    <a href="/books/{{_id}}"> See details </a>
+    <br><br>
+    <form action="/books/{{_id}}/delete" method="POST">
+        <button>🗑 DELETE</button>
+    </form>
+</div>
+<hr>
+{{/each}} --}}
+
+
+
+<h2>Posts</h2>
+{{#each this}}
+<div>
+    <h5><a href="/post/{{_id}}">{{title}}</a> - {{author.username}}</h5>
+    <p>{{content}}</p>
+</div>
+{{/each}}

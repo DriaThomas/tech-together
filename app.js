@@ -54,6 +54,22 @@ app.locals.title = capitalized(projectName);
 const index = require('./routes/index');
 app.use('/', index);
 
+
+const authRoutes = require('./routes/auth.routes');
+app.use('/auth', authRoutes);
+
+const profileRoutes = require("./routes/profile.routes");
+app.use("/profile", profileRoutes);
+
+const reviewRoutes = require("./routes/review.routes");
+app.use("/review", reviewRoutes);
+
+const postRoutes = require("./routes/post.routes");
+app.use("/", postRoutes);
+
+const commentRoutes = require("./routes/comment.routes");
+app.use("/", commentRoutes);
+
 // const authRoutes = require('./routes/auth.routes');
 // app.use('/auth', authRoutes);
 
@@ -63,8 +79,6 @@ app.use('/', index);
 // const reviewRoutes = require('./routes/review.routes');
 // app.use('/review', reviewRoutes);
 
-// const profileRoutes = require('./routes/profile.routes');
-// app.use('/profile', profileRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);
