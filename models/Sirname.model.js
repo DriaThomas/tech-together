@@ -10,6 +10,7 @@ const userSchema = new Schema({
   sirname: { type: String},
   gift: {type:String},
   description: {type:String},
+  member:{ type: Schema.Types.ObjectId, ref: "User" },
 
 
   reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],

@@ -1,7 +1,14 @@
-<h2>Family Unite</h2>
+<h1>Family Unite</h1>
+<div class="family-gifts-center">
+    <h4 class="family-gifts">Find your family and share with family members your gifts/skills you have. Support your
+        family members by commenting
+        on
+        their gifts/skills.
+    </h4>
+</div>
 {{#each this}}
-<div>
+<div class="list-family">
     <h5><a href="/post/{{_id}}">{{title}} </a> - {{post.username}}</h5>
-    <p>{{content}}</p>
+    <p class="history-center">{{content}}</p>
 </div>
 {{/each}}
