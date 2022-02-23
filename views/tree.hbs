@@ -1,7 +1,11 @@
 <h1> Famliy tree</h1>
-{{#each dbUsers}}
-{{posts.username}}
+<h1>{{post.content}}</h1>
+{{#each post}}
+{{this.content}}
+{{this.firstName}}
 {{/each}}
 Family members
-{{username}}
-<a href="posts/details.hbs"></a>
+<button>
+    {{post.firstName}}
+    <a href="posts/details.hbs"></a>
+</button>

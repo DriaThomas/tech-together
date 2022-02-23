@@ -75,18 +75,24 @@ router.get("/post/:id", (req, res) => {
 });
 
 
+
+
 router.get("/post/:id/:title", (req, res) => {
-    const { title } = req.params.id;
+    const { title,firstName } = req.params.id;
     Post.findById(title)
-      .populate("username comments")
+      .populate("firstName comments")
+     
       .then((post) => {
         User.find().then((dbUsers) => {
 
-          console.log(post);
-          res.render("tree", { post, dbUsers });
+        
+          res.render("tree", {firstName:this.firstName, post, dbUsers });
         });
       });
+      // console.log(post.firstName);
   });
+
+
   
 
 module.exports = router;

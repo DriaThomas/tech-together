@@ -325,66 +325,72 @@ router.post('/delete/:user_id', isLoggedIn, (req, res, next) => {
 // ****************************************************************************************
 // GET route to show saved vehicles
 // ****************************************************************************************
-router.get('/savedvehicles', isLoggedIn, (req, res) => {
-  const user = req.session.user;
-  const user_id = req.session.user._id;
-  User.findById(user_id)
-    .populate({
-      path: 'vehicles',
-    })
-    .then((foundUserWithVehicles) => {
-      vehiclesApi
-        .getVehiclesList(foundUserWithVehicles.savedVehicles)
-        .then((list) => {
-          const normalizedList = list.map((current) => {
-            return current.data;
-          });
-          res.render('vehicles/vehicles-list', {
-            vehiclesFromApi: normalizedList,
-            savedVehiclesPage: true,
-            usersListOfVehicles: true,
-          });
-        });
-    });
-});
+// router.get('/savedMember', isLoggedIn, (req, res) => {
+//   const user = req.session.user;
+//   const user_id = req.session.user._id;
+//   User.findById(user_id)
+//     .populate({
+//       path: 'userName',
+//     })
+    // .then((foundUserWithVehicles) => {
+      // User
+      //   .getVehiclesList(foundUserWithVehicles.savedVehicles)
+        // .then((user) => {
+        //   const normalizedList = user.map((current) => {
+        //     return current.data;
+        //   });
+        //   res.render('tree', {
+            // vehiclesFromApi: normalizedList,
+        //     savedMemberPage: true,
+        //     usersListOfMember: true,
+        //   });
+        // });
+    // });
+// });
 
 // ****************************************************************************************
 // POST route to add saved vehicles
 // ****************************************************************************************
-router.post('/savedvehicles', (req, res) => {
-  const user_id = req.session.user._id;
-  const { vin, dealerLink } = req.body;
-  User.findByIdAndUpdate(
-    user_id,
-    {
-      $push: {
-        savedVehicles: { vin: vin, url: dealerLink },
-      },
-    },
-    { new: true }
-  ).then(() => {
-    res.redirect(307, `/vehicles/details/${vin}/${true}`);
-  });
-});
+// router.post('/savedMember', (req, res) => {
+//   const user_id = req.session.user._id;
+//   const { id} = req.body;
+//   User.findByIdAndUpdate(
+//     // user_id,
+//     {
+//       $push: {
+//         savedMember: { id: id, user_id: user_id },
+//       },
+//     },
+//     { new: true }
+//   ).then(() => {
+//     res.redirect(307, `/post/${id}/${true}`);
+//   });
+// });
 
 // ****************************************************************************************
 // GET route to delete a saved vehicle
 // ****************************************************************************************
-router.get('/savedvehicles/delete/:vin', (req, res) => {
-  const user_id = req.session.user._id;
-  const { vin } = req.params;
-  User.findByIdAndUpdate(
-    user_id,
-    {
-      $pull: {
-        savedVehicles: { vin: vin },
-      },
-    },
-    { new: true }
-  ).then((updatedSave) => {
-    console.log('deleted', updatedSave);
-    res.redirect('/profile/savedvehicles');
-  });
-});
+// router.get('/savedvehicles/delete/:vin', (req, res) => {
+//   const user_id = req.session.user._id;
+//   const { vin } = req.params;
+//   User.findByIdAndUpdate(
+//     user_id,
+//     {
+//       $pull: {
+//         savedVehicles: { vin: vin },
+//       },
+//     },
+//     { new: true }
+//   ).then((updatedSave) => {
+//     console.log('deleted', updatedSave);
+//     res.redirect('/profile/savedvehicles');
+//   });
+// });
+
+
+
+
+
+
 
 module.exports = router;

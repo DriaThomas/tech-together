@@ -1,32 +1,35 @@
-<h2>Create Family Tree</h2>
+<h1>Create Family Tree</h1>
 
 <form action="/post-create" method="POST">
-    <label> Family Name:
-        <input type="text" name="title" />
-    </label>
-    <br>
-    <label>Realtionship to Family:
-        <input type="text" name="username" />
-    </label>
-    <label> Family History:
-        <textarea type="text" name="content"> </textarea>
-    </label>
-    {{!-- <label> created by:
-        <textarea type="text" name="content"> </textarea>
-    </label> --}}
-    <br>
+    <div class="create-center-container">
+        <label> Family Name:
+            <input type="text" name="title" />
+        </label>
+        <br>
+        {{!-- <label>Realtionship to Family:
+            <input type="text" name="username" />
+        </label> --}}
+        <label> Family History:
+            <textarea type="text" name="content"> </textarea>
+        </label>
+        {{!-- <label> created by:
+            <textarea type="text" name="content"> </textarea>
+        </label> --}}
+        <br>
 
-    <label for="username-select"> Created by:
-        <select name="username">
-            {{!-- <option disable selected value=""></option> --}}
-            {{#each dbUsers}}
-            <option value="{{this._id}}"> {{this.username}} </option>
-            {{/each}}
-        </select>
-    </label>
-    <br>
-
-    <button type="submit"> Create the post </button>
+        {{!-- <label for="username-select"> Created by:
+            <select name="username"> --}}
+                {{!-- <option disable selected value=""></option> --}}
+                {{!-- {{#each dbUsers}}
+                <option value="{{this._id}}"> {{this.username}} </option>
+                {{/each}}
+            </select>
+        </label> --}}
+        <br>
+    </div>
+    <div class="button-center-create">
+        <button class="create-button" type="submit"> Create the post </button>
+    </div>
 </form>
 
 <a class="nav-link" href="/dashboard">Return to Dashboard</a>

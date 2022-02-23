@@ -1,34 +1,77 @@
-<h2>{{post.title}} Family</h2>
-<div>
-    <h5><a href="/post/{{post._id}}/{{post.title}}">{{post.title}}</a> - {{post.username}}</h5>
-    <p>{{post.content}}</p>
-    <p>{{post.username}}</p>
-    <ul>
-        {{#each post.comments}}
-        <li>Gift: {{this.content}}</li>
-        {{/each}}
+<h1>{{post.title}} Family</h1>
+<div class="container-family-detail">
+    <div class="details-family-center">
+        <div style="display: flex; justify-content: center">
+            <h5><a href="/post/{{post._id}}/{{post.title}}">{{post.title}}</a> </h5>
+        </div>
+        <div class="fmaily-description">
 
-    </ul>
+            <p>{{post.firstName}}</p>
+
+        </div>
+
+
+        <div class="family-desc">
+            {{!-- <h5><a href="/post/{{post._id}}">{{post.title}}</a> {{post.author}} --}}
+                {{!-- {{this.username.firstName}} --}}
+            </h5>
+            <p>{{post.content}}</p>
+            {{comments.firstName}}
+            <ul>
+                {{#each post.comments}}
+                <li>Skills/Gift: {{this.content}}</li>
+
+                {{/each}}
+                {{#each post}}
+                <a href="/profile">{{this.firstName}}</a>
+                {{/each}}
+            </ul>
+        </div>
+
+        {{!-- <p>{{post.username.firstName}}</p> --}}
+        <ul>
+            {{!-- {{#each post.comments}} --}}
+
+            {{!-- {{#each post.comments}}
+            <li> -{{this.content}}</li>
+            {{/each}} --}}
+
+            {{!-- {{#each post.comments}}
+            <li> -{{this.content}} </li>
+
+            {{/each}} --}}
+
+            {{!-- {{#each posts}}
+            >{{username.firstName}}
+            {{/each}} --}}
+        </ul>
+        {{!-- {{post.username.firstName}} --}}
+    </div>
+
+
+    <div class="details-family-center">
+        <form action="/comment-create/{{post._id}}" method="POST">
+
+            <label> Content:
+                <textarea type="text" name="content"> </textarea>
+            </label>
+            <br>
+
+            <label for="author-select"> Created by:
+                <select name="username">
+
+                    {{!-- <option disable selected value=""></option> --}}
+                    {{#each post}}
+                    <option value="{{this._id}}"> {{this.username.firstName}}</option>
+                    {{/each}}
+                </select>
+            </label>
+            <br>
+
+            <button type="submit"> Create the post </button>
+        </form>
+        {{!-- <div class="family-member-button">
+            <button href="{{post.username.firstname}}">I'm a family member</button>
+        </div> --}}
+    </div>
 </div>
-
-
-
-<form action="/comment-create/{{post._id}}" method="POST">
-
-    <label> Content:
-        <textarea type="text" name="content"> </textarea>
-    </label>
-    <br>
-
-    <label for="author-select"> Created by:
-        <select name="username">
-            <option disable selected value=""></option>
-            {{#each dbUsers}}
-            <option value="{{this._id}}"> {{this.username}} </option>
-            {{/each}}
-        </select>
-    </label>
-    <br>
-
-    <button type="submit"> Create the post </button>
-</form>
