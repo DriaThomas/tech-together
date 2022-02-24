@@ -56,29 +56,7 @@ router.post("/family", (req, res) => {
 //////////////////////////////////////////////////////////////////////
 
 
-// ********* require Book model in order to use it *********
-const Sirname = require("../models/Sirname.model");
 
-
-// ****************************************************************************************
-// GET route to display all the books
-// ****************************************************************************************
-
-// http://localhost:3000/books
-// since we prefixed all routes with /books in the app.js when we connected the bookRoutes file with the whole app,
-// here we don't have to specify /books, just the rest
-
-// router.get("/family/add-review", (req, res, next) => {
-
-//     // .find() - always returns an array
-//     Sirname.find()
-//     .then(allBooksFromDB => { // allBooksFromDB is a placeholder, you can name it however you want
-//         // console.log("Here are the books from DB: ", allBooksFromDB);
-
-//         res.render("book-pages/books-list", { books: allBooksFromDB, numberOfBooks: allBooksFromDB.length });
-//     })
-//     .catch(error => console.log("An error occurred while getting books from database: ", error )); // <--- .catch() - if some error happens handle it here
-// });
 
 
 
@@ -89,5 +67,5 @@ module.exports = router;
 
 
 
-// router.use("/auth", authRoutes);
+
 
