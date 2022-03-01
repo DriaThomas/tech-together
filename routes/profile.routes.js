@@ -247,7 +247,6 @@ router.get('/edit', isLoggedIn, (req, res) => {
 router.post(
   '/',
   isLoggedIn,
-  // fileUploader.single('profilePic'),
   (req, res, next) => {
     const user = req.session.user;
     const user_id = mongoose.Types.ObjectId(user._id);
@@ -257,15 +256,10 @@ router.post(
       email,
       sirname,
       gift,
-      // existingImage,
+   
     } = req.body;
-
-    // let profilePic;
-    // if (req.file) {
-    //   profilePic = req.file.path;
-    // } else {
-    //   profilePic = existingImage;
-    // }
+    console.log("he",req.body);
+  
 
     User.findByIdAndUpdate(
       user_id,
@@ -274,7 +268,7 @@ router.post(
         lastName: lastName,
         email: email,
     
-        // currentVehicle: currentVehicle,
+      
         sirname:sirname,
         gift: gift,
     
@@ -283,12 +277,14 @@ router.post(
         new: true,
       }
     )
+
       .then((updatedProfile) => {
         res.render('user/profile', {
           userObject: updatedProfile,
           _id: user_id,
           isLoggedIn: req.session.user,
         });
+      
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {
@@ -299,6 +295,14 @@ router.post(
       });
   }
 );
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************
 // POST route to delete user from database
@@ -321,72 +325,6 @@ router.post('/delete/:user_id', isLoggedIn, (req, res, next) => {
     })
     .catch((error) => next(error));
 });
-
-// ****************************************************************************************
-// GET route to show saved vehicles
-// ****************************************************************************************
-// router.get('/savedMember', isLoggedIn, (req, res) => {
-//   const user = req.session.user;
-//   const user_id = req.session.user._id;
-//   User.findById(user_id)
-//     .populate({
-//       path: 'userName',
-//     })
-    // .then((foundUserWithVehicles) => {
-      // User
-      //   .getVehiclesList(foundUserWithVehicles.savedVehicles)
-        // .then((user) => {
-        //   const normalizedList = user.map((current) => {
-        //     return current.data;
-        //   });
-        //   res.render('tree', {
-            // vehiclesFromApi: normalizedList,
-        //     savedMemberPage: true,
-        //     usersListOfMember: true,
-        //   });
-        // });
-    // });
-// });
-
-// ****************************************************************************************
-// POST route to add saved vehicles
-// ****************************************************************************************
-// router.post('/savedMember', (req, res) => {
-//   const user_id = req.session.user._id;
-//   const { id} = req.body;
-//   User.findByIdAndUpdate(
-//     // user_id,
-//     {
-//       $push: {
-//         savedMember: { id: id, user_id: user_id },
-//       },
-//     },
-//     { new: true }
-//   ).then(() => {
-//     res.redirect(307, `/post/${id}/${true}`);
-//   });
-// });
-
-// ****************************************************************************************
-// GET route to delete a saved vehicle
-// ****************************************************************************************
-// router.get('/savedvehicles/delete/:vin', (req, res) => {
-//   const user_id = req.session.user._id;
-//   const { vin } = req.params;
-//   User.findByIdAndUpdate(
-//     user_id,
-//     {
-//       $pull: {
-//         savedVehicles: { vin: vin },
-//       },
-//     },
-//     { new: true }
-//   ).then((updatedSave) => {
-//     console.log('deleted', updatedSave);
-//     res.redirect('/profile/savedvehicles');
-//   });
-// });
-
 
 
 
